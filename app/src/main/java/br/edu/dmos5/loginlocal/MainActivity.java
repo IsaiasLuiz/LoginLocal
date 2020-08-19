@@ -36,8 +36,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         novoUsuarioTextView = findViewById(R.id.textview_novo);
         logarButton.setOnClickListener(this);
         novoUsuarioTextView.setOnClickListener(this);
-        //Vamos instanciar as preferencias em modo privado, ou seja, somente acessíveis ao próprio app.
+        //Vamos instanciar as preferencias em modo privado, ou seja, somente acessíveis ao próprio app
         mSharedPreferences = this.getPreferences(MODE_PRIVATE);
+        mSharedPreferences = this.getSharedPreferences(getString(R.string.file_preferences), MODE_PRIVATE);
         mEditor = mSharedPreferences.edit();
     }
 
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onRestart();
     }
 
-    /*No onResumo() é um bom momento para verificar se o usuário possui dados armazenados ou não, lembre-se que o onCreate() só é executado uma vez. */
+    /*No onResumo() é um bom momento para verificar se o usuário possui dados armazenados ou não,lembre-se que o onCreate() só é executado uma vez.*/
 
     @Override
     protected void onResume() {
@@ -63,26 +64,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
     }
 
-    @Override
-    protected void onPause() {
-        Log.i(getString(R.string.tag), "Classe: " + getClass().getSimpleName() + "| Método :  onPause()");
+    @Override protected
+    void onPause() {
+        Log.i(getString(R.string.tag), "Classe: " + getClass().getSimpleName() + "| Método : onPause()");
         super.onPause();
     }
 
-    @Override
-    protected void onStop() {
+    @Override protected
+    void onStop() {
         Log.i(getString(R.string.tag), "Classe: " + getClass().getSimpleName() + "| Método : onStop()");
         super.onStop();
     }
 
-    @Override
-    protected void onDestroy() {
+    @Override protected
+    void onDestroy() {
         Log.i(getString(R.string.tag), "Classe: " + getClass().getSimpleName() + "| Método : onDestroy()");
         super.onDestroy();
     }
 
-    @Override
-    public void onClick(View view) {
+    @Override public
+    void onClick(View view) {
         if (view == logarButton) {
             usuario = usuarioEditText.getText().toString();
             senha = senhaEditText.getText().toString();
@@ -90,9 +91,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this, R.string.erro_entrada_msg, Toast.LENGTH_SHORT).show();
                 return;
             }
-            //Antes de abrir a outra tela se verifica se o usuário deseja armazenar os dados de login para outros acessos.
+            //Antes de abrir a outra tela se verifica se o usuário deseja armazenar//os dados de login para outros acessos.
             salvaPreferencias();
             abrirBoasVindas();
+            return;
+        }
+        if (view == novoUsuarioTextView) {
+            Intent in = new Intent(this, NovoUsuarioActivity.class);
+            startActivity(in);
             return;
         }
     }
@@ -125,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    /*Aqui recuperamos as preferências do usuário, e caso existam (boolean lembrar) atualizamos os dados na tela da activity.*/
+    /*Aqui recuperamos as preferências do usuário, e caso existam (boolean lembrar) atualizamosos dados na tela da activity.*/
 
     private void verificarPreferencias() {
         usuario = mSharedPreferences.getString(getString(R.string.key_usuario), "");
